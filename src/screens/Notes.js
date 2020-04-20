@@ -25,7 +25,7 @@ import DBService from '../storage/services';
 import Label from '../model/label';
 import {SwipeListView, SwipeRow} from 'react-native-swipe-list-view';
 import { useSelector,useDispatch } from 'react-redux';
-import {fetchNotes,deleteNote,updateNote} from '../redux/action/actionCreator'
+import allActions from '../redux/action'
 const Title = ({title}) => {
   if (String(title).length != 0) {
     return (
@@ -73,7 +73,7 @@ function Notes({navigation, route}) {
   var currentNote = route.params.note;
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(fetchNotes())
+    dispatch(allActions.fetchNotes())
     /*
     let notes = DBService.objects('Note');
     let result = [];
@@ -105,22 +105,23 @@ function Notes({navigation, route}) {
         return {...new Label(value)};
       });
       let addNew = false;
-      if (currentNote.id == '') {
+      if (currentNote.id == "") {
         addNew = true;
         currentNote.id = DBService.nextid('Note');
       }
-      DBService.update(
-        'Note',
-        new Note(
+      let note = new Note(
           currentNote.id,
           currentNote.title,
           newlabel,
           currentNote.body,
           new Date(currentNote.created),
           currentNote.color,
-        ),
-      );
-      if (addNew == false) {
+        )
+      //Update
+      if (addNew == false) 
+      {
+        dispatch(allActions.updateNote(note))
+        /*
         const newNotes = data.map((note, index) => {
           if (note.id === currentNote.id) {
             return {
@@ -135,10 +136,14 @@ function Notes({navigation, route}) {
           }
         });
         setData(newNotes);
-      } else {
-        setData([currentNote, ...data]);
+        */
       }
-      setCount(count + 1);
+      else
+      {
+        dispatch(allActions.addNote(note))
+        //setData([currentNote, ...data]);
+      }
+      //setCount(count + 1);
     }
   }, [currentNote]);
   const deleteNote = (item) => {
@@ -149,7 +154,7 @@ function Notes({navigation, route}) {
         {
           text: 'Yes',
           onPress: () => {
-            dispatch(deleteNote(item))
+            dispatch(allActions.deleteNote(item))
             /*
             DBService.delete('Note', item);
             let newData = data.filter((note, index) => {

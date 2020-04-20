@@ -36,15 +36,48 @@ export function fetchNotes(){
     }
 }
 export function deleteNote(note){
-    return {type:actionType.DELETE_NOTE,note}
+    return (dispatch)=>{
+        new Promise((resolve,reject)=>{
+            try{
+                DBService.delete('Note',note)
+                resolve(note)
+            }
+            catch(err){
+                reject("Loi truy van "+ err.message)
+            }
+        }).then(note=>dispatch({type:actionType.DELETE_NOTE,note}))
+        .catch(message=>{
+            console.log(message)
+        })
+    }
 }
 export function updateNote(note){
-    return dispatch({type:actionType.UPDATE_NOTE,note})
+    return (dispatch)=>{
+        new Promise((resolve,reject)=>{
+            try {
+                DBService.update('Note',note)
+                resolve(note)
+            } catch (err) {
+                reject('Loi truy van :'+err.message)
+            }
+        }).then(note=>dispatch({type:actionType.UPDATE_NOTE,note}))
+        .catch(message=>{
+            console.log(message)
+        })
+    }
 }
 export function addNote(note){
-    return (dispatch) =>{
-        new Promise(()=>{
-            DBService.insertOne("Note",note)
+    return (dispatch)=>{
+        new Promise((resolve,reject)=>{
+            try {
+                DBService.insertOne('Note',note)
+                resolve(note)
+            } catch (error) {
+                reject("Loi truy van :", error.message)
+            }
+        }).then(note=>dispatch({type:actionType.ADD_NOTES,note}))
+        .catch(message=>{
+            console.log(message)
         })
     }
 }
