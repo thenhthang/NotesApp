@@ -3,11 +3,16 @@ import Label from '../model/label';
 import {dbname} from './db.config';
 import Realm from 'realm';
 //Mở kết nối
-let repository = new Realm({path: dbname, schema: [Note.Schema, Label.Schema],schemaVersion:1});
+const schemaOptions = {
+  path: dbname,
+  schema: [Note.Schema, Label.Schema],
+  schemaVersion: 2
+}
+let repository = new Realm(schemaOptions);
 //Đóng kết nối ở đâu, tôi vẫn chưa biết, nếu bạn có ý tưởng nào hay nói cho tôi nhé!
 function getRealm(){
   if(repository ==  null){
-    repository = new Realm({path: dbname, schema: [Note.Schema, Label.Schema],schemaVersion:1});
+    repository = new Realm(schemaOptions);
   }else{
     return repository
   }
@@ -55,7 +60,14 @@ let DBService = {
   },
   delete: function(schemaName,item){
     repository.write(()=>{
-      let obj = repository.objects(schemaName).filtered(`id = ${item.id}`)
+      //let obj = repository.objects(schemaName).filtered(`id = ${item.id}`)
+      let obj = repository.objectForPrimaryKey(schemaName,item.id)
+      repository.delete(obj)
+    })
+  },
+  deleteAll: function(schemaName){
+    repository.write(()=>{
+      let obj = repository.objects(schemaName)
       repository.delete(obj)
     })
   }

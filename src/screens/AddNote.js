@@ -10,18 +10,18 @@ const labels = ['Đọc báo', 'Karaoke', 'Nhật ký', 'Sổ nợ', 'Anh văn']
 function AddNote({route,navigation}){
     //**
     //Get data from Parameters
-    console.log('Params: ',route.params)
+    //console.log('Params: ',route.params)
     const note = route.params.note;
-    console.log("note label type: ",typeof note.label)
+    //console.log("note label type: ",typeof note.label)
     const [selLabel,setselLabel] = useState([...note.label]) //useState(note.label)
-    console.log('sellabel Sau: ',selLabel)
-    console.log("sellabel type: ",typeof selLabel)
-    console.log("Note: ",note)
+    //console.log('sellabel Sau: ',selLabel)
+    //console.log("sellabel type: ",typeof selLabel)
+    //console.log("Note: ",note)
     //
     
     //route.params.selectedTags
     // console.log("Note: ",note)
-    console.log('Selected Tags: ',route.params.selectedTags)
+    //console.log('Selected Tags: ',route.params.selectedTags)
    
     //Create State
     const[color,setColor] = useState(note.color)
@@ -31,10 +31,10 @@ function AddNote({route,navigation}){
     const[txtBody,settxtBody] = useState(note.body)
     //
     useEffect(()=>{
-        console.log('render xong')
+      
     })//Khong co dependecies: luon chay sua moit lan render
     const AddNew = ()=>{
-        console.log("AddNew")
+       
         var newLabel = selLabel == undefined ?[]:selLabel
         if(route.params?.selectedTags){
             newLabel = route.params.selectedTags

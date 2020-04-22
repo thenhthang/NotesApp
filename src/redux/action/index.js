@@ -1,9 +1,13 @@
-import {fetchNotes,deleteNote,addNote,updateNote} from './actionCreator'
+import {fetchNotes,deleteNote,addNote,updateNote} from './notesCreator'
+import {fetchLabel,addlabel,deleteAll} from './labelCreator'
 
 const allActions = {
     fetchNotes,
     deleteNote,
     addNote,
-    updateNote
+    updateNote,
+    fetchLabel,
+    addlabel,
+    deleteAll
 }
 export default allActions

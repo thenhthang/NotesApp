@@ -13,8 +13,8 @@ export default function TagsView({
   const [count, setCount] = useState(0);
   useEffect(() => {
     //console.warn(selectedTag)
-    //setSelected(selectedTag)
-  }, [count]);
+    setSelected(selectedTag)
+  }, [count,selectedTag]);
   //
 
 
@@ -37,7 +37,8 @@ export default function TagsView({
 
   //
   const makeButtons = () => {
-    //console.warn(allTags)
+    
+   // console.warn(selectedTag)
     return allTags.map((tag, i) => {
       const on = selected.includes(tag);
       //on; off

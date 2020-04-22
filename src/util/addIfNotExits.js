@@ -1,10 +1,10 @@
 export default addIfNotExits = (array, item) => {
-    const exists = array.includes(item);
+    const newArr = [...array]
+    const exists = newArr.includes(item);
     if (exists){
-      return array;
+      return newArr;
     }else {
-      const result = array;
-      result.push(item);
-      return result;
+      newArr.push(item);
+      return newArr;
     }
 };

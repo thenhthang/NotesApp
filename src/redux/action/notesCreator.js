@@ -19,7 +19,7 @@ export function fetchNotes(){
               );
               if (item.label) {
                 for (let label of item.label) {
-                  note.label.unshift(label.name);
+                  note.label.unshift(label);
                 }
               }
               note.created = DateFormat.toddMMyyyy(item.created);
@@ -60,7 +60,10 @@ export function updateNote(note){
             } catch (err) {
                 reject('Loi truy van :'+err.message)
             }
-        }).then(note=>dispatch({type:actionType.UPDATE_NOTE,note}))
+        }).then(note=> mapNote(note))
+        .then(note => { console.log("DISPATCH")
+            dispatch({type:actionType.UPDATE_NOTE,note})
+             })
         .catch(message=>{
             console.log(message)
         })
@@ -75,9 +78,18 @@ export function addNote(note){
             } catch (error) {
                 reject("Loi truy van :", error.message)
             }
-        }).then(note=>dispatch({type:actionType.ADD_NOTES,note}))
+        }).then(note=>mapNote(note))
+        .then(note => dispatch({type:actionType.ADD_NOTES,note}))
         .catch(message=>{
             console.log(message)
         })
     }
+}
+function mapNote(note){
+    return {...note,created:DateFormat.toddMMyyyy(note.created),label:lableToArray(note.label)}
+}
+function lableToArray(lable){
+    return lable.map((item)=>{
+        return item
+    })
 }

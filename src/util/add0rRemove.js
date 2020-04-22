@@ -1,12 +1,12 @@
 export default addOrRemove = (array, item) => {
-    const exists = array.includes(item);
+    const newArr = [...array]
+    const exists = newArr.includes(item);
     if (exists) {
-      return array.filter((c) => {
+      return newArr.filter((c) => {
         return c !== item;
       });
     } else {
-      const result = array;
-      result.push(item);
-      return result;
+      newArr.push(item);
+      return newArr;
     }
 };

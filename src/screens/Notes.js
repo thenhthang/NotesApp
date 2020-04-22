@@ -73,6 +73,7 @@ function Notes({navigation, route}) {
   var currentNote = route.params.note;
   const dispatch = useDispatch()
   useEffect(() => {
+    console.log('A')
     dispatch(allActions.fetchNotes())
     /*
     let notes = DBService.objects('Note');
@@ -98,12 +99,12 @@ function Notes({navigation, route}) {
     console.log('Result: ', result);
     */
   }, []); //Dấu [] để useEffect này chỉ chạy 1 lần đầu lúc start component
-
+  
   useEffect(() => {
     if (Object.keys(route.params.note).length != 0){
-      let newlabel = currentNote.label.map((value, index) => {
-        return {...new Label(value)};
-      });
+      //let newlabel = currentNote.label.map((value, index) => {
+      //  return {...new Label(value)};
+      //});
       let addNew = false;
       if (currentNote.id == "") {
         addNew = true;
@@ -112,12 +113,13 @@ function Notes({navigation, route}) {
       let note = new Note(
           currentNote.id,
           currentNote.title,
-          newlabel,
+          currentNote.label,
           currentNote.body,
           new Date(currentNote.created),
           currentNote.color,
         )
       //Update
+      console.log(note)
       if (addNew == false) 
       {
         dispatch(allActions.updateNote(note))
@@ -143,7 +145,6 @@ function Notes({navigation, route}) {
         dispatch(allActions.addNote(note))
         //setData([currentNote, ...data]);
       }
-      //setCount(count + 1);
     }
   }, [currentNote]);
   const deleteNote = (item) => {

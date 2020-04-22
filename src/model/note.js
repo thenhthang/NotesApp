@@ -12,7 +12,7 @@ Note.Schema = {
     properties: {
         id:  'int',
         title: 'string',
-        label:'Label[]',
+        label:'string[]',
         body:'string',
         created: 'date',
         color:'string'
