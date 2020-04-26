@@ -1,9 +1,11 @@
 import React from 'react'
 import { View,StyleSheet,Text,TouchableOpacity } from "react-native"
 import ICON from 'react-native-vector-icons/MaterialCommunityIcons'
-export default function Header({name,navigation,transferdata}){
+import { DrawerActions } from '@react-navigation/native';
+export default function Header({name,navigation,title,transferdata}){
     const screenname = name
     console.log('HEADER......',screenname)
+    const jumpToAction = DrawerActions.jumpTo('HomeStack');
     switch (screenname) {
         case 'addnote':
             return <View style={styles.barAddNote}>
@@ -23,8 +25,23 @@ export default function Header({name,navigation,transferdata}){
                     </View>
             break;
         case 'notes':
-            return <View style={styles.toolBar}>
-                        <Text style={styles.toolBar} >NOTES</Text>
+            return <View style={styles.container}>
+                        <TouchableOpacity onPress={()=>{navigation.openDrawer()}}>
+                            <ICON name='menu' style={styles.buttonBack}/>
+                        </TouchableOpacity>
+                        <View style={styles.titlebox} >
+                            <Text  style={styles.toolBar} >NOTES</Text>
+                        </View>
+                    </View>
+            break;
+        case 'profile':
+            return <View style={styles.container}>
+                        <TouchableOpacity style={styles.backbox} onPress={()=>{navigation.dispatch(jumpToAction)}} >
+                            <ICON name='arrow-left-bold-outline' style={styles.buttonBack} />
+                        </TouchableOpacity>
+                        <View style = {styles.titlebox}>
+                            <Text style= {styles.titletext}>{title}</Text>
+                        </View>
                     </View>
             break;
         case 'tags':
@@ -36,18 +53,40 @@ export default function Header({name,navigation,transferdata}){
                             style={styles.buttonBack} />
                 {/* <Text style={styles.barAddNoteText} > Done </Text> */}
             </TouchableOpacity>
-            
-        </View>
+                 </View>
             break;
         default:
             break;
     }
 }
 const styles = StyleSheet.create({
+    container:{
+        flexDirection:'row',
+        paddingHorizontal:5,
+    },
+    backbox:{
+        flex:1
+    },
+    titlebox:{
+        flex:9,
+       // position:'absolute',
+       // top: 0,
+       // left: 0,
+       // right: 0,
+       // bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+       // backgroundColor:'green',
+    },
+    titletext:{
+        color:'mediumseagreen',
+        fontSize:16,
+        fontWeight:'bold'
+    },
     toolBar:{
         justifyContent:'center',
         alignItems:'center',
-        fontSize:40,
+        fontSize:25,
         color:'mediumseagreen',
         fontWeight:'bold'
       },

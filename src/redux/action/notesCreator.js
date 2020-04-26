@@ -75,8 +75,8 @@ export function addNote(note){
             try {
                 DBService.insertOne('Note',note)
                 resolve(note)
-            } catch (error) {
-                reject("Loi truy van :", error.message)
+            } catch (err) {
+                reject("Loi truy van :", err)
             }
         }).then(note=>mapNote(note))
         .then(note => dispatch({type:actionType.ADD_NOTES,note}))

@@ -26,6 +26,7 @@ import Label from '../model/label';
 import {SwipeListView, SwipeRow} from 'react-native-swipe-list-view';
 import { useSelector,useDispatch } from 'react-redux';
 import allActions from '../redux/action'
+import {parseDate} from '../util/datehelper'
 const Title = ({title}) => {
   if (String(title).length != 0) {
     return (
@@ -110,16 +111,19 @@ function Notes({navigation, route}) {
         addNew = true;
         currentNote.id = DBService.nextid('Note');
       }
+      console.log('curentNoteDate: ',currentNote.created)
+      const ngay = parseDate(currentNote.created,'yyyy-mm-dd')
+      console.log('curentNoteDate Parse: ',ngay)
       let note = new Note(
           currentNote.id,
           currentNote.title,
           currentNote.label,
           currentNote.body,
-          new Date(currentNote.created),
+          ngay,
           currentNote.color,
         )
       //Update
-      console.log(note)
+      console.log('Note tra ve:',note)
       if (addNew == false) 
       {
         dispatch(allActions.updateNote(note))
@@ -176,12 +180,12 @@ function Notes({navigation, route}) {
   };
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle='light-content' />
       <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
         <View style={{backgroundColor: 'white', flex: 1}}>
           {/* <ScrollView> */}
           <Header name="notes" navigation={navigation} />
-          <SwipeListView
+          <SwipeListView 
             useFlatList={true}
             data={data}
             horizontal={false}

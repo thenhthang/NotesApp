@@ -1,6 +1,7 @@
 import React, { Component, useState, useEffect } from 'react'
 import { Text, View,StyleSheet,SafeAreaView, ScrollView,
-     TextInput, KeyboardAvoidingView,TouchableOpacity,Alert } from 'react-native'
+     TextInput, KeyboardAvoidingView,TouchableOpacity,Alert,
+    Platform } from 'react-native'
 import Note from '../model/note'
 import Header from './Header'
 import ColorPalette from 'react-native-color-palette'
@@ -40,7 +41,9 @@ function AddNote({route,navigation}){
             newLabel = route.params.selectedTags
         }
         let today = new Date();
-        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        console.log('today: ',today)
+        const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        console.log('Ngày: ',date)
         if(String(txtBody).length > 0 && txtBody != undefined){
             const newnote = new Note(
                 note.id,
@@ -75,48 +78,43 @@ function AddNote({route,navigation}){
     //         setLabel(route.params.selectedTags)
     //     }
     // })
+    const behavior = Platform.OS ==='ios'?'padding':''
      return(
+        <SafeAreaView style={{flex:1, flexDirection:'column'}}>
+        <Header name = 'addnote'  navigation={navigation} transferdata = {AddNew}/>
         <KeyboardAvoidingView 
                     style={{flex:1,
                             justifyContent:'center',
-                            backgroundColor:color
-                    }} 
-                    behavior='padding' >
-         <SafeAreaView style={{flex:1, flexDirection:'column'}}>
-            <Header name = 'addnote' 
-                      navigation={navigation}
-                      transferdata = {AddNew}
-                      />
+                            backgroundColor:color}}
+                    behavior={behavior} >
             <View style = {styles.container}>
-            <ScrollView>
-                <View style = {styles.titlebox} >
-                    <TextInput style ={styles.titletext}
-                                placeholder='Title'
-                                defaultValue={txtTitle}
+                {/* <ScrollView  > */}
+                    <View style = {styles.titlebox} >
+                        <TextInput style ={styles.titletext}
+                                    placeholder='Title'
+                                    defaultValue={txtTitle}
+                                    autoCorrect={false}
+                                    onChangeText={(text)=>{
+                                        settxtTitle(text)
+                                    }}
+                                    returnKeyType='next'  
+                                    onTouchStart={()=>{setVisibledColorCombo(false)}}
+                        />
+                    </View>
+                    <View style = {styles.bodybox}>
+                        <TextInput style={styles.bodytext}
+                                placeholder='Note'
+                                defaultValue={txtBody}
+                                multiline={true}
                                 autoCorrect={false}
-                                onChangeText={(text)=>{
-                                    settxtTitle(text)
-                                }}
-                                returnKeyType='next'  
+                               
+                                onChangeText={(text)=>settxtBody(text)}
+                                keyboardType='default'
                                 onTouchStart={()=>{setVisibledColorCombo(false)}}
-                    />
-                </View>
-                <View style = {styles.bodybox}>
-                    <TextInput style={styles.bodytext}
-                            placeholder='Note'
-                            defaultValue={txtBody}
-                            multiline={true}
-                            autoCorrect={false}
-                            autoFocus={true}
-                            onChangeText={(text)=>settxtBody(text)}
-                            keyboardType='default'
-                            onTouchStart={()=>{setVisibledColorCombo(false)}}
-                    />
-                </View>
-            </ScrollView>
-            </View>
-            
-            <View style={styles.bottomBar}>
+                        />
+                    </View>
+                {/* </ScrollView> */}
+                <View style={styles.bottomBar}>
                 {
                     isVisibledColorCombo === true?
                     <View >
@@ -127,15 +125,6 @@ function AddNote({route,navigation}){
                                 />    
                     </View>:null
                 }
-                {/* {
-                    isVisibledLabel === true?
-                    <TagsView
-                    allTags={tags}
-                    selectedTag={selected}
-                    isExclusive={false}
-                    onChangeTags = {(tagselected)=>{Alert.alert(JSON.stringify(tagselected))}}
-                     />:null
-                } */}
                 <View style={styles.bottomBarMenu}  >
                     <TouchableOpacity onPress={()=>{navigation.navigate('Tags',
                                 {selected: selectedTags(),
@@ -147,19 +136,17 @@ function AddNote({route,navigation}){
                     </TouchableOpacity>
                 </View>
             </View>
-            {/* <View>
-                <Text>Footer</Text>
-            </View> */}
-         </SafeAreaView>
+            </View>
          </KeyboardAvoidingView>
+         </SafeAreaView>
      )
  }
  const styles = StyleSheet.create({
      container:{
-         marginHorizontal:15,
+        // marginHorizontal:15,
+         flex:1,
          justifyContent:'center',
-       //  flex:1,
-        // backgroundColor:'green'
+       //  backgroundColor:'red'
         // position:'absolute'
      },
      toolbar:{
@@ -173,7 +160,13 @@ function AddNote({route,navigation}){
          shadowRadius:5
      },
      titlebox:{
-         paddingVertical:10
+         height:50,
+         paddingHorizontal:5
+     },
+     bodybox:{
+        flex:1,
+        // backgroundColor:'yellow',
+         paddingHorizontal:5
      },
      titletext:{
          fontSize:22,
@@ -182,7 +175,8 @@ function AddNote({route,navigation}){
      },
      bodytext:{
          fontSize:17,
-         color:'black'
+         color:'black',
+         marginBottom:40
      },
      bottomBar:{
          position:'absolute',

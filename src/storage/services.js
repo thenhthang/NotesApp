@@ -4,9 +4,9 @@ import {dbname} from './db.config';
 import Realm from 'realm';
 //Mở kết nối
 const schemaOptions = {
-  path: dbname,
-  schema: [Note.Schema, Label.Schema],
-  schemaVersion: 2
+  path: dbname, //Tên file db, tương tự tên database trong sql
+  schema: [Note.Schema, Label.Schema], //Tên object và các trường dữ liệu, tương tự tên các table trong sql
+  schemaVersion: 2 //Phiên bản, mỗi khi thêm , xoá các thuốc tính là lên version mới
 }
 let repository = new Realm(schemaOptions);
 //Đóng kết nối ở đâu, tôi vẫn chưa biết, nếu bạn có ý tưởng nào hay nói cho tôi nhé!
